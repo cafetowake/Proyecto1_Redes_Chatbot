@@ -1,6 +1,9 @@
 import sys
 import json
 
+PROTOCOL_VERSION = "2025-06-18"
+SERVER_NAME = "pharmacy-mcp"
+SERVER_VERSION = "1.0.0"
 
 class McpError(Exception):
     def __init__(self, code, message):
@@ -8,14 +11,20 @@ class McpError(Exception):
         self.code = code
         self.message = message
 
+def handle_initialize(params):
+    return {
+        "protocolVersion": PROTOCOL_VERSION,
+        "capabilities": {"tools": {}},
+        "serverInfo": {"name": SERVER_NAME, "version": SERVER_VERSION},
+    }
 
-METHODS = {}
-
+METHODS = {
+    "initialize": handle_initialize,
+}
 
 def write_message(obj):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
-
 
 def process_request(request):
     req_id = request.get("id")
@@ -33,7 +42,6 @@ def process_request(request):
     except Exception as e:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32603, "message": str(e)}}
 
-
 def main():
     for line in sys.stdin:
         line = line.strip()
@@ -50,7 +58,6 @@ def main():
 
         response = process_request(request)
         write_message(response)
-
 
 if __name__ == "__main__":
     main()
