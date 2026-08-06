@@ -18,8 +18,49 @@ def handle_initialize(params):
         "serverInfo": {"name": SERVER_NAME, "version": SERVER_VERSION},
     }
 
+TOOLS = [
+    {
+        "name": "search_by_symptom",
+        "description": "Busca medicamentos recomendados segun un sintoma reportado por el cliente",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "symptom": {"type": "string", "description": "Sintoma en lenguaje natural, ej. 'dolor de cabeza'"}
+            },
+            "required": ["symptom"],
+        },
+    },
+    {
+        "name": "get_medication_details",
+        "description": "Obtiene la informacion completa de un medicamento por su nombre",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "Nombre del medicamento"}
+            },
+            "required": ["name"],
+        },
+    },
+    {
+        "name": "purchase_medication",
+        "description": "Realiza la compra de un medicamento y descuenta del inventario",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "Nombre del medicamento"},
+                "quantity": {"type": "integer", "description": "Cantidad a comprar", "minimum": 1},
+            },
+            "required": ["name", "quantity"],
+        },
+    },
+]
+
+def handle_tools_list(params):
+    return {"tools": TOOLS}
+
 METHODS = {
     "initialize": handle_initialize,
+    "tools/list": handle_tools_list,
 }
 
 def write_message(obj):
