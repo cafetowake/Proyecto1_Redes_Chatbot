@@ -96,7 +96,7 @@ def handle_purchase_medication(args):
     med = MEDICATIONS.get(name)
     if not med:
         return text_result(f"El medicamento '{name}' no existe en el catalogo.", is_error=True)
-    if not isinstance(quantity, int) or quantity <= 0:
+    if not isinstance(quantity, int) or isinstance(quantity, bool) or quantity <= 0:
         return text_result("La cantidad debe ser un entero mayor a 0.", is_error=True)
     if med["requires_prescription"]:
         return text_result(f"'{name}' requiere receta medica, no se puede comprar por este medio.", is_error=True)
