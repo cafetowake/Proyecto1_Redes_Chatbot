@@ -20,11 +20,13 @@ messages = [
 ]
 
 for msg in messages:
-    proc.stdin.write(json.dumps(msg) + "\n")
-    proc.stdin.flush()
-    if "id" in msg:
-        line = proc.stdout.readline()
-        print(json.dumps(json.loads(line), indent=2, ensure_ascii=False))
-        print("---")
+    if proc.stdin:
+        proc.stdin.write(json.dumps(msg) + "\n")
+        proc.stdin.flush()
+    if isinstance(msg, dict) and msg.get("id") is not None:
+        if proc.stdout:
+            line = proc.stdout.readline()
+            print(json.dumps(json.loads(line), indent=2, ensure_ascii=False))
+            print("---")
 
 proc.terminate()
