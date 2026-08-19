@@ -1,8 +1,28 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingeniería
+Departamento de Ciencias de la Computación
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - MCP Chatbot
+Cliente de prueba para el servidor MCP local
+
+Nombre: Paula Daniela De León Godoy
+Carnet: 23202
+Fecha: 19/08/2026
+
+Descripcion:
+Levanta server.py como subproceso y ejecuta el handshake completo para verificar el servidor de forma standalone, sin depender del chatbot.
+"""
+
 import json
 import subprocess
 
+import sys
+
 proc = subprocess.Popen(
-    ["python3", "server.py"],
+    [sys.executable, "server.py"],
     stdin=subprocess.PIPE,
     stdout=subprocess.PIPE,
     text=True,

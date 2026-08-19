@@ -1,3 +1,24 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingeniería
+Departamento de Ciencias de la Computación
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - MCP Chatbot
+Servidor MCP local - Catalogo de datos
+
+Nombre: Paula Daniela De León Godoy
+Carnet: 23202
+Fecha: 19/08/2026
+
+Descripcion:
+Datos del catalogo de medicamentos y el mapeo de sintomas a medicamentos recomendados, utilizados por el servidor MCP local para responder a las
+tools search_by_symptom, get_medication_details y purchase_medication.
+"""
+
+# Catalogo de medicamentos: precio en quetzales, stock disponible y si requiere receta medica para poder comprarse.
+
 MEDICATIONS = {
     "paracetamol": {
         "description": "Analgesico y antipiretico, alivia dolor leve a moderado y fiebre",
@@ -36,6 +57,8 @@ MEDICATIONS = {
         "requires_prescription": False,
     },
 }
+
+# Mapeo de sintoma a lista de medicamentos recomendados, ordenados por prioridad de recomendacion.
 
 SYMPTOM_MAP = {
     "dolor de cabeza": ["paracetamol", "ibuprofeno"],

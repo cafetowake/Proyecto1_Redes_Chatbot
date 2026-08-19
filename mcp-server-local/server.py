@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingeniería
+Departamento de Ciencias de la Computación
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - MCP Chatbot
+Servidor MCP local
+
+Nombre: Paula Daniela De León Godoy
+Carnet: 23202
+Fecha: 19/08/2026
+
+Descripcion:
+Implementacion manual del protocolo MCP sobre JSON-RPC 2.0, sin utilizar SDKs como FastMCP. El transporte es stdio: cada mensaje es un JSON en una
+sola linea, sin saltos de linea embebidos. Expone tres tools relacionadas a una farmacia: busqueda de medicamentos por sintoma, consulta de detalle
+de un medicamento y compra con validacion de stock y receta. """
+
 import sys
 import json
 from catalog import MEDICATIONS, SYMPTOM_MAP
@@ -6,11 +25,13 @@ PROTOCOL_VERSION = "2025-06-18"
 SERVER_NAME = "pharmacy-mcp"
 SERVER_VERSION = "1.0.0"
 
+
 class McpError(Exception):
     def __init__(self, code, message):
         super().__init__(message)
         self.code = code
         self.message = message
+
 
 def handle_initialize(params):
     return {
@@ -18,6 +39,7 @@ def handle_initialize(params):
         "capabilities": {"tools": {}},
         "serverInfo": {"name": SERVER_NAME, "version": SERVER_VERSION},
     }
+
 
 TOOLS = [
     {
@@ -58,6 +80,7 @@ TOOLS = [
 
 
 def text_result(text, is_error=False):
+    # isError va dentro del resultado, el protocolo se ejecuto bien, solo que la operacion de negocio fallo, y el LLM necesita leer el texto para explicarselo al usuario.
     return {"content": [{"type": "text", "text": text}], "isError": is_error}
 
 
@@ -95,7 +118,7 @@ def handle_purchase_medication(args):
 
     med = MEDICATIONS.get(name)
     if not med:
-        return text_result(f"El medicamento '{name}' no existe en el catalogo.", is_error=True)
+        return text_result(f"El medicamento '{name}' no existe en el catalogo.", is_error=True)    
     if not isinstance(quantity, int) or isinstance(quantity, bool) or quantity <= 0:
         return text_result("La cantidad debe ser un entero mayor a 0.", is_error=True)
     if med["requires_prescription"]:
@@ -114,11 +137,12 @@ TOOL_HANDLERS = {
     "purchase_medication": handle_purchase_medication,
 }
 
+
 def handle_tools_list(params):
     return {"tools": TOOLS}
 
+
 def handle_tools_call(params):
-    
     name = params.get("name")
     arguments = params.get("arguments", {})
     handler = TOOL_HANDLERS.get(name)
@@ -126,15 +150,18 @@ def handle_tools_call(params):
         raise McpError(-32602, f"Unknown tool: {name}")
     return handler(arguments)
 
+
 METHODS = {
     "initialize": handle_initialize,
     "tools/list": handle_tools_list,
     "tools/call": handle_tools_call,
 }
 
+
 def write_message(obj):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
+
 
 def process_request(request):
     req_id = request.get("id")
@@ -152,6 +179,7 @@ def process_request(request):
     except Exception as e:
         return {"jsonrpc": "2.0", "id": req_id, "error": {"code": -32603, "message": str(e)}}
 
+
 def main():
     for line in sys.stdin:
         line = line.strip()
@@ -163,11 +191,13 @@ def main():
             write_message({"jsonrpc": "2.0", "id": None, "error": {"code": -32700, "message": "Parse error"}})
             continue
 
+        # las notifications no llevan id y no esperan respuesta
         if "id" not in request:
             continue
 
         response = process_request(request)
         write_message(response)
+
 
 if __name__ == "__main__":
     main()
