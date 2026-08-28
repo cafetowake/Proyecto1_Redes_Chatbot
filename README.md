@@ -23,7 +23,7 @@
 ## Running the server standalone
 
     cd mcp-server-local
-    python3 test_client.py
+    python test_client.py
 
 This runs the server as a subprocess and exercises initialize, notifications/initialized, tools/list and tools/call, printing each
 JSON-RPC response.
@@ -31,7 +31,7 @@ JSON-RPC response.
 ## Running the server directly
 
     cd mcp-server-local
-    python3 server.py
+    python server.py
 
 Then send JSON-RPC messages one per line via stdin. See mcp-server-local/SPEC.md for the full message reference.
 
