@@ -23,8 +23,19 @@ def run():
     pharmacy.initialize()
     pharmacy.list_tools()
 
-    tools_for_llm = mcp_tools_to_anthropic_format(pharmacy.tools)
+    filesystem = McpClient(
+        "filesystem",
+        ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/paula/proyecto1-workspace"],
+        logger=logger,
+    )
+    filesystem.start()
+    filesystem.initialize()
+    filesystem.list_tools()
+
+    all_tools = pharmacy.tools + filesystem.tools
+    tools_for_llm = mcp_tools_to_anthropic_format(all_tools)
     tool_clients = {tool["name"]: pharmacy for tool in pharmacy.tools}
+    tool_clients.update({tool["name"]: filesystem for tool in filesystem.tools})
 
     llm = LlmClient()
     conversation = Conversation(system="Eres un asistente de farmacia. Usa las herramientas disponibles cuando el usuario mencione sintomas o quiera comprar un medicamento.")
