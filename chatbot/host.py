@@ -28,14 +28,25 @@ def run():
         ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/paula/proyecto1-workspace"],
         logger=logger,
     )
+
     filesystem.start()
     filesystem.initialize()
     filesystem.list_tools()
 
-    all_tools = pharmacy.tools + filesystem.tools
+    git_server = McpClient(
+    "git",
+    [sys.executable, "-m", "mcp_server_git", "--repository", "/home/paula/proyecto1-workspace"],
+    logger=logger,
+    )
+    git_server.start()
+    git_server.initialize()
+    git_server.list_tools()
+
+    all_tools = pharmacy.tools + filesystem.tools + git_server.tools
     tools_for_llm = mcp_tools_to_anthropic_format(all_tools)
     tool_clients = {tool["name"]: pharmacy for tool in pharmacy.tools}
     tool_clients.update({tool["name"]: filesystem for tool in filesystem.tools})
+    tool_clients.update({tool["name"]: git_server for tool in git_server.tools})
 
     llm = LlmClient()
     conversation = Conversation(system="Eres un asistente de farmacia. Usa las herramientas disponibles cuando el usuario mencione sintomas o quiera comprar un medicamento.")
@@ -73,6 +84,8 @@ def run():
         print(f"Bot: {final_text}")
 
     pharmacy.stop()
+    filesystem.stop()
+    git_server.stop()
 
 
 if __name__ == "__main__":
