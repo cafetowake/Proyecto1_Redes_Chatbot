@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import MagicMock
 
 from conversation import Conversation
+from host import build_server_configs
 from mcp_client import McpClient
 from mcp_logger import McpLogger
 
@@ -47,6 +48,17 @@ class TestHostFlow(unittest.TestCase):
 
     def tearDown(self):
         self.pharmacy.stop()
+
+    def test_build_server_configs_uses_windows_compatible_paths(self):
+        configs = build_server_configs()
+
+        self.assertEqual(configs[0]["name"], "pharmacy-local")
+        self.assertTrue(configs[0]["command"][0].endswith("python.exe"))
+        self.assertTrue(configs[0]["command"][1].endswith("mcp-server-local\\server.py"))
+
+        filesystem = next(config for config in configs if config["name"] == "filesystem")
+        self.assertEqual(filesystem["command"][0].lower().endswith("npx.cmd"), True)
+        self.assertTrue(filesystem["command"][3].startswith("C:"))
 
     def test_multi_turn_context_and_tool_call(self):
         conversation = Conversation(system="Eres un asistente de farmacia.")
