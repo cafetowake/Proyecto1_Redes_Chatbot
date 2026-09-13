@@ -1,7 +1,7 @@
 import shutil
 import sys
 from pathlib import Path
-
+from mcp_http_client import McpHttpClient
 from llm_client import LlmClient
 from conversation import Conversation
 from mcp_client import McpClient
@@ -9,7 +9,6 @@ from mcp_logger import McpLogger
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PHARMACY_SERVER = PROJECT_ROOT / "mcp-server-local" / "server.py"
-
 
 def mcp_tools_to_anthropic_format(mcp_tools):
     return [
@@ -25,18 +24,10 @@ def build_server_configs():
     npx_path = shutil.which("npx") or "npx"
 
     return [
-        {
-            "name": "pharmacy-local",
-            "command": [sys.executable, str(PHARMACY_SERVER)],
-        },
-        {
-            "name": "filesystem",
-            "command": [npx_path, "-y", "@modelcontextprotocol/server-filesystem", str(PROJECT_ROOT)],
-        },
-        {
-            "name": "git",
-            "command": [sys.executable, "-m", "mcp_server_git", "--repository", str(PROJECT_ROOT)],
-        },
+        {"name": "pharmacy-local", "transport": "stdio", "command": [sys.executable, str(PHARMACY_SERVER)]},
+        {"name": "filesystem", "transport": "stdio", "command": [npx_path, "-y", "@modelcontextprotocol/server-filesystem", str(PROJECT_ROOT)]},
+        {"name": "git", "transport": "stdio", "command": [sys.executable, "-m", "mcp_server_git", "--repository", str(PROJECT_ROOT)]},
+        {"name": "pharmacy-remote", "transport": "http", "url": "https://pharmacy-mcp-xxxxx.run.app"},
     ]
 
 
@@ -47,11 +38,15 @@ def start_servers(configs, logger):
 
     for config in configs:
         try:
-            client = McpClient(config["name"], config["command"], logger=logger)
+            if config["transport"] == "http":
+                client = McpHttpClient(config["name"], config["url"], logger=logger)
+            else:
+                client = McpClient(config["name"], config["command"], logger=logger)
+
             client.start()
             client.initialize()
             client.list_tools()
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, OSError) as exc:
             print(f"Advertencia: se omite el servidor '{config['name']}' porque no está disponible: {exc}")
             continue
 
@@ -61,6 +56,7 @@ def start_servers(configs, logger):
             tool_clients[tool["name"]] = client
 
     return servers, all_tools, tool_clients
+
 
 def run():
     logger = McpLogger()
