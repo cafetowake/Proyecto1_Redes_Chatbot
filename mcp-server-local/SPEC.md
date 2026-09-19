@@ -87,3 +87,42 @@ These are returned as a JSON-RPC `error` object, not inside `result`, and only a
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search_by_symptom","arguments":{"symptom":"dolor de cabeza"}}}
 {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"purchase_medication","arguments":{"name":"paracetamol","quantity":2}}}
 ```
+## Remote deployment
+
+The same server, with the same protocol and business logic defined in
+protocol.py and catalog.py, is also exposed over HTTP transport for
+cloud deployment on Render. Business logic is identical across both
+transports, every method, tool, and validation rule described in the
+previous sections applies without changes.
+
+### Differences from the local transport
+
+- Transport, HTTP instead of stdio.
+- Each JSON-RPC message travels as the body of a POST request, instead
+  of as a line on stdin/stdout.
+- Content-Type application/json on every request.
+- A notification (message without id) responds with 204 No Content
+  instead of simply writing nothing to stdout.
+- Containerized deployment with Docker, on Render.
+
+### Sample HTTP request
+
+    POST / HTTP/1.1
+    Host: proyecto1-redes-chatbot.onrender.com
+    Content-Type: application/json
+
+    {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"...","version":"..."}}}
+
+### Current deployment URL
+
+    https://proyecto1-redes-chatbot.onrender.com
+
+### Verifying with curl
+
+    curl -X POST https://proyecto1-redes-chatbot.onrender.com \
+      -H "Content-Type: application/json" \
+      -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+Note, the free tier on Render puts the service to sleep after 15
+minutes without traffic, the first request after that takes 30 to 50
+seconds to respond while the container wakes up.
