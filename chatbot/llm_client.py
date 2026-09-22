@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Chatbot host - Anthropic API client
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Wraps the call to the Anthropic API, without handling conversation
+state or tool logic, that lives in conversation.py and host.py.
+"""
+
 import os
 import anthropic
 

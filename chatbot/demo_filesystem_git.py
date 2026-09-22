@@ -1,3 +1,23 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Scripted demo, Filesystem and Git tool usage
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Sends a single natural language instruction to the chatbot to create a
+repository, a README, stage it, and commit, resolved through chained
+calls to the Filesystem and Git MCP tools.
+"""
+
 from llm_client import LlmClient
 from conversation import Conversation
 from mcp_logger import McpLogger

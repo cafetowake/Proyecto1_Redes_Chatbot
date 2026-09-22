@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+HTTP transport for the pharmacy MCP server
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Exposes protocol.py over HTTP instead of stdio, for remote deployment.
+Uses only the Python standard library, no external dependencies.
+"""
+
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json

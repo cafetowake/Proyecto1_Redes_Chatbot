@@ -1,3 +1,23 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Traffic generator for Wireshark capture
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Sends a fixed sequence of JSON-RPC messages to the remote MCP server
+over HTTPS, exporting TLS session keys via SSLKEYLOGFILE so the
+resulting capture can be decrypted and analyzed in Wireshark.
+"""
+
 import os
 import ssl
 import json

@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+End-to-end tests against the remote MCP server
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Verifies the deployed server on Render responds correctly over HTTP,
+covering the same business rules already tested on the local server.
+"""
+
 import os
 import unittest
 

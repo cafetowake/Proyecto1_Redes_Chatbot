@@ -1,3 +1,23 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+MCP protocol logic, transport-independent
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+JSON-RPC method handlers and business logic for the pharmacy server,
+with no dependency on stdio or HTTP, so it can be reused by both
+transports without duplicating code.
+"""
+
 from catalog import MEDICATIONS, SYMPTOM_MAP
 
 PROTOCOL_VERSION = "2025-06-18"

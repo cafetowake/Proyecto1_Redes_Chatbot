@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Chatbot host - Generic MCP client over HTTP
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+HTTP version of mcp_client.py, same public interface, used to talk to
+the remote MCP server deployed on Render.
+"""
+
 import json
 import itertools
 import urllib.request

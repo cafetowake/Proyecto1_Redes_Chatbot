@@ -1,3 +1,22 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Chatbot host - Generic MCP client over stdio
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Launches an MCP server as a subprocess and speaks JSON-RPC over its
+stdin and stdout. Same public interface as mcp_http_client.py.
+"""
+
 import json
 import subprocess
 import itertools
@@ -37,6 +56,8 @@ class McpClient:
         self._send(message)
 
     def _request(self, method, params=None):
+        # blocks until a full response line is read, the server always
+        # replies with one line per request that carries an id
         req_id = self._next_id()
         message = {"jsonrpc": "2.0", "id": req_id, "method": method}
         if params is not None:

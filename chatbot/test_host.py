@@ -1,3 +1,23 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Chatbot host - Automated tests
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Tests multi-turn context and tool call handling against the real local
+pharmacy server, with the LLM response mocked. Also verifies that
+server launch commands resolve to Windows-compatible paths.
+"""
+
 import sys
 import unittest
 

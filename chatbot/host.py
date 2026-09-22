@@ -1,3 +1,23 @@
+"""
+Universidad del Valle de Guatemala
+Facultad de Ingenieria
+Departamento de Ciencias de la Computacion
+CC3067 - Redes de Computadoras
+Ciclo 02, 2026
+
+Proyecto 1 - Uso de un protocolo existente
+Chatbot host - Main program
+
+Name: Paula Daniela De Leon Godoy
+Carnet: 23202
+Date: 09/21/2026
+
+Description:
+Coordinates the Anthropic API client, the conversation context, and
+the MCP clients for the four integrated servers, local, remote,
+Filesystem, and Git.
+"""
+
 import shutil
 import sys
 from pathlib import Path
@@ -76,6 +96,8 @@ def run():
         response = llm.send(conversation.get_messages(), tools=tools_for_llm, system=conversation.system)
 
         while response.stop_reason == "tool_use":
+            # Claude can chain several tool calls before answering in
+            # text, hence the while instead of an if
             assistant_blocks = [block.model_dump() for block in response.content]
             conversation.add_assistant_message(assistant_blocks)
 
